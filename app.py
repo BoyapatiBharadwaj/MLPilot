@@ -183,7 +183,7 @@ with col2:
     MLPilot
     </h1>
 
-    <h3 style='color:#3B82F6;'>
+    <h3>
     AI-Powered AutoML Platform
     </h3>
 
@@ -279,6 +279,12 @@ if uploaded_file is not None:
     df = load_dataset(uploaded_file)
 
     st.session_state.dataset = df
+
+    st.session_state.dataset_name = (
+        uploaded_file.name
+        .replace(".csv", "")
+        .replace(" ", "_")
+    )
     
     
 if st.session_state.dataset is None:
@@ -441,7 +447,8 @@ encoding_method = st.selectbox(
 
     [
         "One-Hot Encoding",
-        "Ordinal Encoding"
+        "Ordinal Encoding",
+        "Target Encoding"
     ]
 )
 
@@ -599,6 +606,8 @@ if train_clicked:
             build_preprocessor(
 
                 X,
+                
+                y,
 
                 numeric_strategy,
 
@@ -837,9 +846,13 @@ if st.session_state.results:
             
     csv_data = export_csv(df)
     
+    dataset_name = uploaded_file.name
+    
     report_buffer = create_report(
 
         st.session_state.current_model,
+
+        dataset_name,
 
         st.session_state.current_problem_type,
 
@@ -847,9 +860,27 @@ if st.session_state.results:
 
         results["training_time"],
 
-        results["cv_score"]
+        results["cv_score"],
+
+        user_params,
+
+        results["sample_count"],
+
+        results["feature_count"]
     )
         
+    
+    model_name_clean = (
+        st.session_state.current_model
+            .replace(" ", "_")
+    )
+
+    dataset_name = st.session_state.get(
+        "dataset_name",
+        "dataset"
+    )
+    
+    
     st.header(
         "Downloads"
     )
@@ -865,7 +896,7 @@ if st.session_state.results:
         st.download_button(
             "⬇ Download Model",
             model_buffer,
-            "model.pkl"
+            f"{model_name_clean}.pkl"
         )
 
     with d2:
@@ -873,7 +904,7 @@ if st.session_state.results:
         st.download_button(
             "⬇ Download Dataset",
             csv_data,
-            "dataset.csv"
+            f"{dataset_name}.csv"
         )
 
     with d3:
@@ -881,7 +912,7 @@ if st.session_state.results:
         st.download_button(
             "⬇ Download Report",
             report_buffer,
-            "report.pdf"
+            f"{model_name_clean}_Report.pdf"
         )
     
     st.header("Visualizations")

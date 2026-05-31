@@ -13,6 +13,8 @@ from .model_factory import get_model
 
 from .feature_utils import \
     get_feature_names
+    
+from sklearn.preprocessing import LabelEncoder
 
 
 def train_model(
@@ -73,6 +75,23 @@ def train_model(
         )
     ])
 
+    label_encoder = None
+
+    if (
+        problem_type == "Classification"
+        and "XGBoost" in model_name
+    ):
+
+        label_encoder = LabelEncoder()
+
+        y_train = label_encoder.fit_transform(
+            y_train
+        )
+
+        y_test = label_encoder.transform(
+            y_test
+        )
+
     pipeline.fit(
         X_train,
         y_train
@@ -98,6 +117,16 @@ def train_model(
         X_test
     )
 
+    if label_encoder is not None:
+
+        predictions = label_encoder.inverse_transform(
+            predictions.astype(int)
+        )
+
+        y_test = label_encoder.inverse_transform(
+            y_test.astype(int)
+        )
+
     probabilities = None
 
     try:
@@ -109,6 +138,17 @@ def train_model(
     except Exception as e:
 
         probabilities = None
+        
+    cv_y = y
+
+    if (
+        problem_type == "Classification"
+        and "XGBoost" in model_name
+    ):
+
+        le_cv = LabelEncoder()
+
+        cv_y = le_cv.fit_transform(y)
 
     cv_score = None
 
@@ -164,7 +204,7 @@ def train_model(
 
             X,
 
-            y,
+            cv_y,
 
             scoring=scoring,
 
@@ -172,9 +212,13 @@ def train_model(
 
         ).mean()
 
-    except Exception:
+    except Exception as e:
 
-        pass
+        print(
+            f"CV Error: {e}"
+        )
+
+        cv_score = None
 
     train_time = (
         time.time() - start_time
@@ -183,6 +227,8 @@ def train_model(
     return {
 
         "pipeline": pipeline,
+        
+        "label_encoder": label_encoder,
 
         "X_train": X_train,
 

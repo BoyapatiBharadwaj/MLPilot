@@ -14,6 +14,8 @@ from sklearn.preprocessing import (
     RobustScaler
 )
 
+from category_encoders import TargetEncoder
+
 def get_scaler(scaling_method):
 
     scalers = {
@@ -45,6 +47,10 @@ def get_encoder(encoding_method):
             unknown_value=-1
         )
 
+    elif encoding_method == "Target Encoding":
+
+        return TargetEncoder()
+
     return OneHotEncoder(
         handle_unknown="ignore",
         sparse_output=False
@@ -53,6 +59,7 @@ def get_encoder(encoding_method):
 
 def build_preprocessor(
         X,
+        y,
         numeric_strategy,
         categorical_strategy,
         numeric_constant,

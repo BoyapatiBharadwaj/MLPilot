@@ -132,15 +132,17 @@ def get_model(
     if "XGBoost" in model_name:
 
         return model_class(
-
+            
             n_jobs=-1,
-
+            
             tree_method="hist",
-
+            
             verbosity=0,
-
-            random_state=42,
-
+            
+            use_label_encoder=False,
+            
+            eval_metric="mlogloss",
+            
             **params
         )
 
