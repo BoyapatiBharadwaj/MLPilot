@@ -54,8 +54,8 @@ from modules.exporter import (
 
 
 st.set_page_config(
-    page_title="ModelPilot",
-    page_icon="assets\ModelPilot_Logo.png",
+    page_title="MLPilot",
+    page_icon="assets\MLPilot_Logo.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -172,7 +172,7 @@ col1, col2 = st.columns([1,6])
 
 with col1:
     st.image(
-        "assets/ModelPilot_Logo.png",
+        "assets/MLPilot_Logo.png",
         width = 420
     )
 
@@ -180,7 +180,7 @@ with col2:
 
     st.markdown("""
     <h1 style='margin-bottom:0px;'>
-    ModelPilot
+    MLPilot
     </h1>
 
     <h3 style='color:#3B82F6;'>
@@ -251,13 +251,13 @@ col1, col2 = st.sidebar.columns([1,4])
 
 with col1:
     st.image(
-        "assets/ModelPilot_Logo.png",
+        "assets/MLPilot_Logo.png",
         width=150
     )
 
 with col2:
     st.markdown(
-        "### ModelPilot"
+        "### MLPilot"
     )
 
 st.sidebar.caption(
@@ -1024,7 +1024,7 @@ st.markdown(
     """
     <div style='text-align:center'>
     
-    <h4>ModelPilot</h4>
+    <h4>MLPilot</h4>
     
     AI-Powered AutoML Platform
     
