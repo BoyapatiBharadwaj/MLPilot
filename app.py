@@ -234,6 +234,20 @@ st.markdown("---")
 
 initialize_session()
 
+if "initialized" not in st.session_state:
+
+    st.session_state.results = None
+
+    st.session_state.dataset = None
+
+    st.session_state.comparison_results = []
+
+    st.session_state.current_model = None
+
+    st.session_state.current_problem_type = None
+
+    st.session_state.initialized = True
+
 
 
 if "results" not in st.session_state:
