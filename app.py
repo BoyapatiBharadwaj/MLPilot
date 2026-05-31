@@ -55,7 +55,7 @@ from modules.exporter import (
 
 st.set_page_config(
     page_title="MLPilot",
-    page_icon="assets\MLPilot_Logo.png",
+    page_icon="assets/MLPilot_Logo.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )

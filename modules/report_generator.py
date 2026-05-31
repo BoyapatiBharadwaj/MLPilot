@@ -39,7 +39,7 @@ def create_report(
 
         Paragraph(
 
-            "MLPilot Studio Report",
+            "MLPilot AI Analysis Report",
 
             styles["Title"]
         )
