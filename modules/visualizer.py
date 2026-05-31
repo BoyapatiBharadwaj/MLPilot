@@ -23,8 +23,14 @@ def plot_confusion_matrix(
         y_pred
     )
 
+    labels = sorted(
+        list(set(y_true))
+    )
+
     fig = px.imshow(
         cm,
+        x=labels,
+        y=labels,
         text_auto=True,
         aspect="auto"
     )

@@ -7,6 +7,8 @@ from modules.data_loader import (
     detect_problem_type
 )
 
+from sklearn.metrics import classification_report
+
 from modules.preprocessing import (
     build_preprocessor
 )
@@ -52,13 +54,183 @@ from modules.exporter import (
 
 
 st.set_page_config(
-    page_title="AutoML Studio",
-    page_icon="🤖",
-    layout="wide"
+    page_title="ModelPilot",
+    page_icon="assets\ModelPilot_Logo.png",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-st.title("🤖 AutoML Studio")
-st.caption("Train ML Models Without Writing Code")
+st.markdown("""
+<style>
+
+div.stButton > button {
+    width: 100%;
+    height: 65px;
+
+    border-radius: 15px !important;
+
+    background: linear-gradient(
+        90deg,
+        #2563EB,
+        #06B6D4
+    ) !important;
+
+    color: white !important;
+
+    font-size: 22px !important;
+
+    font-weight: 700 !important;
+
+    border: none !important;
+
+    transition: all 0.3s ease;
+}
+
+div.stButton > button p {
+    color: white !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+}
+
+div.stButton > button:hover {
+    background: linear-gradient(
+        90deg,
+        #1D4ED8,
+        #0891B2
+    ) !important;
+
+    color: white !important;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(
+        37,
+        99,
+        235,
+        0.35
+    );
+}
+
+div.stButton > button:hover p {
+    color: white !important;
+}
+
+div.stButton > button:focus {
+    color: white !important;
+}
+
+div.stButton > button:active {
+    transform: scale(0.98);
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+
+.block-container{
+    padding-top:1rem;
+}
+
+[data-testid="stSidebar"]{
+    background-color:#F8FAFC;
+}
+
+h1{
+    font-weight:700;
+}
+
+</style>
+""",
+unsafe_allow_html=True)
+
+hide_streamlit_style = """
+<style>
+
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+header {
+    visibility: hidden;
+}
+
+</style>
+"""
+
+st.markdown(
+    hide_streamlit_style,
+    unsafe_allow_html=True
+)
+
+col1, col2 = st.columns([1,6])
+
+with col1:
+    st.image(
+        "assets/ModelPilot_Logo.png",
+        width = 420
+    )
+
+with col2:
+
+    st.markdown("""
+    <h1 style='margin-bottom:0px;'>
+    ModelPilot
+    </h1>
+
+    <h3 style='color:#3B82F6;'>
+    AI-Powered AutoML Platform
+    </h3>
+
+    <p style='font-size:18px;'>
+
+    Build, train, evaluate and deploy machine learning models
+    without writing code.
+
+    </p>
+
+    """,
+    unsafe_allow_html=True
+    )
+    
+st.markdown("---")
+
+st.markdown("""
+<div style="
+padding:25px;
+border-radius:15px;
+background:linear-gradient(90deg,#0F172A,#1E40AF);
+color:white;
+margin-top:10px;
+margin-bottom:20px;
+">
+
+<h2 style="color:white;">
+🚀 Build Machine Learning Models in Minutes
+</h2>
+
+<p style="font-size:18px;">
+Upload datasets, preprocess data, train powerful ML models,
+compare results and export production-ready models.
+</p>
+
+<p>
+✅ Classification & Regression<br>
+✅ Hyperparameter Tuning<br>
+✅ Interactive Visualizations<br>
+✅ Model Comparison Dashboard<br>
+✅ PDF Reports & Model Export
+</p>
+
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("---")
 
 initialize_session()
 
@@ -74,6 +246,26 @@ if "comparison_results" not in st.session_state:
     st.session_state.comparison_results = []
     
     
+
+col1, col2 = st.sidebar.columns([1,4])
+
+with col1:
+    st.image(
+        "assets/ModelPilot_Logo.png",
+        width=150
+    )
+
+with col2:
+    st.markdown(
+        "### ModelPilot"
+    )
+
+st.sidebar.caption(
+    "Build • Train • Analyze • Deploy"
+)
+
+st.sidebar.markdown("---")
+
 st.sidebar.header("Dataset")
 
 uploaded_file = st.sidebar.file_uploader(
@@ -388,7 +580,7 @@ with col3:
     
     
 train_clicked = st.button(
-    "🚀 Train Model",
+    "🚀 Train & Evaluate Model",
     use_container_width=True
 )
 
@@ -466,19 +658,10 @@ if train_clicked:
                 results["training_time"]
         }
 
-        existing_models = [
-
-            item["Model"]
-
-            for item in
-            st.session_state.comparison_results
-        ]
-
-        if selected_model not in existing_models:
-
-            st.session_state.comparison_results.append(
-                comparison_entry
-            )
+        st.session_state.comparison_results.append(
+            comparison_entry
+        )
+        
         
         progress.progress(75)
         st.session_state.results = results
@@ -486,7 +669,7 @@ if train_clicked:
         st.session_state.current_problem_type = problem_type
         progress.progress(100)
         st.success(
-            "Training Complete"
+            "Training Completed"
         )
         
 if st.session_state.results:
@@ -520,6 +703,7 @@ if st.session_state.results:
 
         else "N/A"
     )
+    
     
     st.header("Evaluation")
     y_test = results["y_test"]
@@ -562,27 +746,52 @@ if st.session_state.results:
 
             ]
         })
-        st.dataframe(metric_df)
-        
-        st.subheader(
-            "Confusion Matrix"
+        c1, c2, c3, c4 = st.columns(4)
+
+        c1.metric(
+            "Accuracy",
+            f"{metrics['Accuracy']:.4f}"
         )
 
-        st.write(
-            metrics[
-                "Confusion Matrix"
-            ]
+        c2.metric(
+            "Precision",
+            f"{metrics['Precision']:.4f}"
         )
+
+        c3.metric(
+            "Recall",
+            f"{metrics['Recall']:.4f}"
+        )
+
+        c4.metric(
+            "F1 Score",
+            f"{metrics['F1 Score']:.4f}"
+        )
+
+        if metrics["ROC-AUC"] is not None:
+
+            st.metric(
+                "ROC-AUC",
+                f"{metrics['ROC-AUC']:.4f}"
+            )
+        
         st.subheader(
             "Classification Report"
         )
 
-        st.text(
-            metrics[
-                "Classification Report"
-            ]
+        report_df = pd.DataFrame(
+            classification_report(
+                y_test,
+                predictions,
+                output_dict=True
+            )
+        ).transpose()
+
+        st.dataframe(
+            report_df.round(4),
+            use_container_width=True
         )
-        
+                
     else:
         metrics = regression_metrics(
 
@@ -599,40 +808,35 @@ if st.session_state.results:
             "Value":
                 list(metrics.values())
         })
-        st.dataframe(metric_df)
-        
-    st.header(
-        "Downloads"
-    )
+        c1, c2, c3, c4, c5 = st.columns(5)
 
-    model_buffer = export_model(
-        results["pipeline"]
-    )
+        c1.metric(
+            "R²",
+            f"{metrics['R2 Score']:.4f}"
+        )
 
-    st.download_button(
+        c2.metric(
+            "MAE",
+            f"{metrics['MAE']:.4f}"
+        )
 
-        label="Download Model",
+        c3.metric(
+            "MSE",
+            f"{metrics['MSE']:.4f}"
+        )
 
-        data=model_buffer,
+        c4.metric(
+            "RMSE",
+            f"{metrics['RMSE']:.4f}"
+        )
 
-        file_name="model.pkl",
-
-        mime="application/octet-stream"
-    )
-
+        c5.metric(
+            "MAPE",
+            f"{metrics['MAPE']:.4f}"
+        )
+            
     csv_data = export_csv(df)
-
-    st.download_button(
-
-        label="Download Dataset",
-
-        data=csv_data,
-
-        file_name="dataset.csv",
-
-        mime="text/csv"
-    )
-
+    
     report_buffer = create_report(
 
         st.session_state.current_model,
@@ -645,17 +849,40 @@ if st.session_state.results:
 
         results["cv_score"]
     )
-
-    st.download_button(
-
-        label="Download PDF Report",
-
-        data=report_buffer,
-
-        file_name="report.pdf",
-
-        mime="application/pdf"
+        
+    st.header(
+        "Downloads"
     )
+
+    model_buffer = export_model(
+        results["pipeline"]
+    )
+
+    d1, d2, d3 = st.columns(3)
+
+    with d1:
+
+        st.download_button(
+            "⬇ Download Model",
+            model_buffer,
+            "model.pkl"
+        )
+
+    with d2:
+
+        st.download_button(
+            "⬇ Download Dataset",
+            csv_data,
+            "dataset.csv"
+        )
+
+    with d3:
+
+        st.download_button(
+            "⬇ Download Report",
+            report_buffer,
+            "report.pdf"
+        )
     
     st.header("Visualizations")
 
@@ -686,6 +913,27 @@ if st.session_state.results:
             y_test,
             results["probabilities"]
         )
+        
+        try:
+
+            coef_fig = plot_coefficients(
+                results["fitted_model"],
+                results["feature_names"]
+            )
+
+            if coef_fig:
+
+                st.subheader(
+                    "Feature Coefficients"
+                )
+
+                st.plotly_chart(
+                    coef_fig,
+                    use_container_width=True
+                )
+
+        except Exception:
+            pass
 
         if pr_fig:
             st.plotly_chart(
@@ -720,12 +968,9 @@ if st.session_state.results:
     
         
 if (
-
     "comparison_results"
     in st.session_state
-
     and
-
     len(
         st.session_state.comparison_results
     ) > 0
@@ -736,21 +981,56 @@ if (
     )
 
     leaderboard = pd.DataFrame(
+        st.session_state.comparison_results
+    )
+    
+    best_model = leaderboard.loc[
+        leaderboard["CV Score"].idxmax()
+    ]
 
-        st.session_state
-        .comparison_results
+    st.success(
+        f"🏆 Best Model: {best_model['Model']} | Score: {best_model['CV Score']:.4f}"
     )
 
     leaderboard = leaderboard.sort_values(
         "CV Score",
         ascending=False
+    ).reset_index(
+        drop=True
+    )
+
+    leaderboard.insert(
+        0,
+        "Rank",
+        range(
+            1,
+            len(leaderboard) + 1
+        )
     )
 
     st.dataframe(
-        leaderboard,
+        leaderboard.style.highlight_max(
+            subset=["CV Score"],
+            color="lightgreen"
+        ),
         use_container_width=True
     )
     
-    
 
     
+st.markdown("---")
+
+st.markdown(
+    """
+    <div style='text-align:center'>
+    
+    <h4>ModelPilot</h4>
+    
+    AI-Powered AutoML Platform
+    
+    Build • Train • Analyze • Deploy
+    
+    </div>
+    """,
+    unsafe_allow_html=True
+)
