@@ -53,6 +53,35 @@ from modules.exporter import (
 
 import streamlit.components.v1 as components
 
+import base64
+
+with open("MLPilot_Logo.png", "rb") as img:
+    logo_base64 = base64.b64encode(
+        img.read()
+    ).decode()
+
+
+def section_card(title):
+
+    st.markdown(
+        f"""
+        <div style="
+        background:white;
+        padding:12px 20px;
+        border-radius:12px;
+        margin:8px 0;
+        box-shadow:0 2px 8px rgba(0,0,0,0.05);
+        ">
+            <h2 style="
+            margin:0;
+            font-size:34px;
+            ">
+            {title}
+            </h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 st.set_page_config(
     page_title="MLPilot",
@@ -180,6 +209,59 @@ h1{
     font-weight:700;
 }
 
+/* Metric Cards */
+
+[data-testid="metric-container"]{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    border:1px solid #E2E8F0;
+
+    box-shadow:0 4px 12px rgba(
+        0,
+        0,
+        0,
+        0.08
+    );
+}
+
+[data-testid="metric-container"] label{
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+[data-testid="metric-container"] > div{
+
+    color:#0F172A;
+}
+
+/* DataFrames */
+
+[data-testid="stDataFrame"]{
+
+    border-radius:18px;
+}
+
+/* Buttons */
+
+div.stButton > button{
+
+    border-radius:15px !important;
+}
+
+/* Reduce Spacing */
+
+div[data-testid="stVerticalBlock"]{
+
+    gap:0.5rem;
+}
+
 </style>
 """,
 unsafe_allow_html=True)
@@ -207,69 +289,172 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-col1, col2 = st.columns([1,6])
-
-with col1:
-    st.image(
-        "MLPilot_Logo.png",
-        width = 420
-    )
-
-with col2:
-
-    st.markdown("""
-    <h1 style='margin-bottom:0px;'>
-    MLPilot
-    </h1>
-
-    <h3>
-    AI-Powered AutoML Platform
-    </h3>
-
-    <p style='font-size:18px;'>
-
-    Build, train, evaluate and deploy machine learning models
-    without writing code.
-
-    </p>
-
-    """,
-    unsafe_allow_html=True
-    )
-    
-st.markdown("---")
-
-st.markdown("""
+st.markdown(f"""
 <div style="
-padding:25px;
-border-radius:15px;
-background:linear-gradient(90deg,#0F172A,#1E40AF);
-color:white;
-margin-top:10px;
+background:white;
+padding:20px 30px;
+border-radius:20px;
+box-shadow:0 4px 15px rgba(0,0,0,0.08);
 margin-bottom:20px;
 ">
 
-<h2 style="color:white;">
-🚀 Build Machine Learning Models in Minutes
-</h2>
+<div style="
+display:flex;
+align-items:center;
+justify-content:space-between;
+">
 
-<p style="font-size:18px;">
-Upload datasets, preprocess data, train powerful ML models,
-compare results and export production-ready models.
+<div style="
+display:flex;
+align-items:center;
+gap:20px;
+">
+
+<img src="data:image/png;base64,{logo_base64}"
+width="360">
+
+<div>
+
+<h1 style="
+margin:0;
+font-size:54px;
+color:#0F172A;
+">
+MLPilot
+</h1>
+
+<p style="
+font-size:22px;
+color:#2563EB;
+margin:0;
+font-weight:600;
+">
+AI-Powered AutoML Platform
 </p>
 
-<p>
-✅ Classification & Regression<br>
-✅ Hyperparameter Tuning<br>
-✅ Interactive Visualizations<br>
-✅ Model Comparison Dashboard<br>
-✅ PDF Reports & Model Export
+<p style="
+font-size:16px;
+color:#64748B;
+margin-top:8px;
+">
+Build • Train • Analyze • Deploy
 </p>
+
+</div>
+
+</div>
+
+<div>
+
+<img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png"
+width="320">
+
+</div>
+
+</div>
 
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("---")
+c1, c2, c3, c4 = st.columns(4)
+
+with c1:
+
+    st.markdown("""
+    <div style="
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    ">
+
+    <h4>📦 Models</h4>
+
+    <h1 style="
+    color:#6366F1;
+    ">
+    15+
+    </h1>
+
+    <p>Built-in Algorithms</p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+with c2:
+
+    st.markdown("""
+    <div style="
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    ">
+
+    <h4>🎯 Tasks</h4>
+
+    <h1 style="
+    color:#10B981;
+    ">
+    2
+    </h1>
+
+    <p>Classification & Regression</p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+with c3:
+
+    st.markdown("""
+    <div style="
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    ">
+
+    <h4>📄 Reports</h4>
+
+    <h1 style="
+    color:#F59E0B;
+    ">
+    PDF
+    </h1>
+
+    <p>Detailed Analysis</p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+with c4:
+
+    st.markdown("""
+    <div style="
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    ">
+
+    <h4>☁ Export</h4>
+
+    <h1 style="
+    color:#2563EB;
+    ">
+    PKL
+    </h1>
+
+    <p>Model Export</p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
 
 initialize_session()
 
@@ -320,32 +505,98 @@ if "comparison_results" not in st.session_state:
     
     
 
-col1, col2 = st.sidebar.columns([1,4])
+st.sidebar.image(
+    "MLPilot_Logo.png",
+    width=90
+)
 
-with col1:
-    st.image(
-        "MLPilot_Logo.png",
-        width=150
-    )
+st.sidebar.markdown("""
+<h2 style="
+margin-bottom:0px;
+">
+MLPilot
+</h2>
 
-with col2:
-    st.markdown(
-        "### MLPilot"
-    )
+<p style="
+color:#64748B;
+font-size:16px;
+">
+Build • Train • Analyze • Deploy
+</p>
+""", unsafe_allow_html=True)
 
-st.sidebar.caption(
-    "Build • Train • Analyze • Deploy"
+st.sidebar.markdown("---")
+
+st.sidebar.markdown("""
+<h3>
+📂 DATASET
+</h3>
+""", unsafe_allow_html=True)
+
+uploaded_file = st.sidebar.file_uploader(
+    "Upload CSV Dataset",
+    type=["csv"],
+    label_visibility="collapsed"
 )
 
 st.sidebar.markdown("---")
 
-st.sidebar.header("Dataset")
+st.sidebar.markdown("""
+<h3>
+⚡ WORKFLOW
+</h3>
+""", unsafe_allow_html=True)
 
-uploaded_file = st.sidebar.file_uploader(
-    "Upload CSV",
-    type=["csv"]
-)
+workflow_steps = [
+    "Upload Dataset",
+    "Train Model",
+    "Compare Models",
+    "View Results",
+    "Export"
+]
 
+for i, step in enumerate(workflow_steps):
+
+    st.sidebar.markdown(
+        f"""
+        <div style="
+        background:#EFF6FF;
+        padding:12px;
+        border-radius:12px;
+        margin-bottom:10px;
+        border-left:4px solid #2563EB;
+        ">
+
+        <b>{i+1}. {step}</b>
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+st.sidebar.markdown("---")
+
+st.sidebar.markdown("""
+<div style="
+background:#F8FAFC;
+padding:20px;
+border-radius:15px;
+border:1px solid #E2E8F0;
+">
+
+<h4>
+🚀 Get Started
+</h4>
+
+<p style="
+font-size:14px;
+color:#64748B;
+">
+Upload a dataset and build machine learning models in minutes.
+</p>
+
+</div>
+""", unsafe_allow_html=True)
 
 if uploaded_file is not None:
 
@@ -400,28 +651,134 @@ if uploaded_file is not None:
     
 if st.session_state.dataset is None:
 
-    st.info("Upload dataset to begin")
+    st.markdown("""
+    <div style="
+    background:white;
+    padding:50px;
+    border-radius:25px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+    border:2px dashed #BFDBFE;
+    text-align:center;
+    margin-top:10px;
+    ">
+
+    <div style="
+    font-size:60px;
+    margin-bottom:10px;
+    ">
+    ☁️
+    </div>
+
+    <h1 style="
+    color:#0F172A;
+    margin-bottom:10px;
+    ">
+    Upload Your Dataset to Begin
+    </h1>
+
+    <p style="
+    font-size:18px;
+    color:#64748B;
+    margin-bottom:25px;
+    ">
+    Upload your dataset using the sidebar.
+    Start building machine learning models without writing code.
+    </p>
+
+    <div style="
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+    ">
+
+    <div style="
+    background:#EEF2FF;
+    padding:15px 25px;
+    border-radius:12px;
+    ">
+    📊 Data Analysis
+    </div>
+
+    <div style="
+    background:#ECFDF5;
+    padding:15px 25px;
+    border-radius:12px;
+    ">
+    🤖 AutoML
+    </div>
+
+    <div style="
+    background:#FEF3C7;
+    padding:15px 25px;
+    border-radius:12px;
+    ">
+    📈 Visualization
+    </div>
+
+    <div style="
+    background:#DBEAFE;
+    padding:15px 25px;
+    border-radius:12px;
+    ">
+    📄 PDF Reports
+    </div>
+
+    </div>
+
+    </div>
+    """, unsafe_allow_html=True)
 
     st.stop()
     
-    
+  
 df = st.session_state.dataset
 
-st.header("Dataset Explorer")
+section_card("📊 Dataset Overview")
+
+c1, c2, c3, c4, c5 = st.columns(5)
+
+c1.metric(
+    "Rows",
+    f"{df.shape[0]:,}"
+)
+
+c2.metric(
+    "Columns",
+    df.shape[1]
+)
+
+c3.metric(
+    "Missing",
+    int(df.isnull().sum().sum())
+)
+
+c4.metric(
+    "Duplicates",
+    int(df.duplicated().sum())
+)
+
+c5.metric(
+    "Memory",
+    f"{round(df.memory_usage().sum()/1024,1)} KB"
+)
+
+section_card("📊 Dataset Explorer")
 
 tab1, tab2, tab3, tab4 = st.tabs([
-    "Preview",
-    "Statistics",
-    "Missing Values",
-    "Data Types"
+    "📄 Preview",
+    "📊 Statistics",
+    "⚠ Missing Values",
+    "🧬 Data Types"
 ])
 
 
 with tab1:
 
     st.dataframe(
-        df,
-        use_container_width=True
+        df.head(100),
+        use_container_width=True,
+        height=400
     )
 
     st.write("Shape:", df.shape)
@@ -429,13 +786,36 @@ with tab1:
 
 with tab2:
 
-    st.dataframe(
-        df.describe(include="all")
+    st.info(
+        "Summary statistics of numerical and categorical features."
     )
-    
+    stats_df = df.describe(
+        include="all"
+    ).astype(str)
+
+    st.dataframe(
+        stats_df,
+        use_container_width=True
+    )
+        
 
 with tab3:
 
+    missing_count = (
+        df.isnull().sum().sum()
+    )
+
+    if missing_count == 0:
+
+        st.success(
+            "No missing values found."
+        )
+
+    else:
+
+        st.warning(
+            f"{missing_count} missing values detected."
+        )
     st.dataframe(
         get_missing_value_report(df)
     )
@@ -443,16 +823,25 @@ with tab3:
 
 with tab4:
 
+    type_counts = (
+        df.dtypes
+        .astype(str)
+        .value_counts()
+    )
+
+    st.bar_chart(type_counts)
     st.dataframe(
         pd.DataFrame({
             "Column": df.columns,
             "Type": df.dtypes.astype(str)
         })
     )
-    
 
-st.header("Feature Selection")
+section_card("🎯 Feature Selection")
 
+left_panel, right_panel = st.columns(
+    [2,1]
+)
 
 target_column = st.selectbox(
     "Target Column",
@@ -541,7 +930,7 @@ if (
     )
 
 
-st.header("Preprocessing")
+section_card("⚙ Preprocessing")
 
 
 col1, col2 = st.columns(2)
@@ -652,7 +1041,7 @@ if (
     )
 
 
-st.header("Model Selection")
+section_card("🤖 Model Selection")
 
 
 if problem_type == "Classification":
@@ -753,7 +1142,7 @@ for param, value in model_params_config.items():
         user_params[param] = value
         
         
-st.header("Training Configuration")
+section_card("🚀 Training Configuration")
 
 
 col1, col2, col3 = st.columns(3)
@@ -948,7 +1337,7 @@ if train_clicked:
         
 if st.session_state.results:
     results = st.session_state.results
-    st.header("Training Summary")
+    section_card("📋 Training Summary")
     c1, c2, c3, c4 = st.columns(4)
     c1.metric(
         "Samples",
@@ -979,7 +1368,7 @@ if st.session_state.results:
     )
     
     
-    st.header("Evaluation")
+    section_card("📈 Evaluation")
     y_test = results["y_test"]
 
     predictions = results["predictions"]
@@ -1154,9 +1543,7 @@ if st.session_state.results:
     )
     
     
-    st.header(
-        "Downloads"
-    )
+    section_card("⬇ Downloads")
 
     model_buffer = export_model(
         results["pipeline"]
@@ -1217,7 +1604,9 @@ if st.session_state.results:
 
         st.session_state.visualization_logged = True
     
-    st.header("Visualizations")
+    section_card("📊 Visualizations")
+
+    left, right = st.columns(2)
 
     if st.session_state.current_problem_type == "Classification":
 
@@ -1226,27 +1615,43 @@ if st.session_state.results:
             predictions
         )
 
-        st.plotly_chart(
-            cm_fig,
-            use_container_width=True
-        )
-
         roc_fig = plot_roc_curve(
             y_test,
             results["probabilities"]
         )
 
-        if roc_fig:
+        with left:
+
             st.plotly_chart(
-                roc_fig,
+                cm_fig,
                 use_container_width=True
             )
+
+        if roc_fig:
+
+            with right:
+
+                st.plotly_chart(
+                    roc_fig,
+                    use_container_width=True
+                )
 
         pr_fig = plot_pr_curve(
             y_test,
             results["probabilities"]
         )
-        
+
+        left2, right2 = st.columns(2)
+
+        if pr_fig:
+
+            with left2:
+
+                st.plotly_chart(
+                    pr_fig,
+                    use_container_width=True
+                )
+
         try:
 
             coef_fig = plot_coefficients(
@@ -1256,47 +1661,43 @@ if st.session_state.results:
 
             if coef_fig:
 
-                st.subheader(
-                    "Feature Coefficients"
-                )
+                with right2:
 
-                st.plotly_chart(
-                    coef_fig,
-                    use_container_width=True
-                )
+                    st.plotly_chart(
+                        coef_fig,
+                        use_container_width=True
+                    )
 
         except Exception:
             pass
-
-        if pr_fig:
-            st.plotly_chart(
-                pr_fig,
-                use_container_width=True
-            )
             
     else:
 
-        actual_pred_fig = \
-            plot_actual_vs_predicted(
-                y_test,
-                predictions
-            )
+        left, right = st.columns(2)
 
-        st.plotly_chart(
-            actual_pred_fig,
-            use_container_width=True
+        actual_pred_fig = plot_actual_vs_predicted(
+            y_test,
+            predictions
         )
 
-        residual_fig = \
-            plot_residuals(
-                y_test,
-                predictions
+        with left:
+
+            st.plotly_chart(
+                actual_pred_fig,
+                use_container_width=True
             )
 
-        st.plotly_chart(
-            residual_fig,
-            use_container_width=True
+        residual_fig = plot_residuals(
+            y_test,
+            predictions
         )
+
+        with right:
+
+            st.plotly_chart(
+                residual_fig,
+                use_container_width=True
+            )
         
     
         
@@ -1320,9 +1721,7 @@ if (
 
         st.session_state.comparison_logged = True
 
-    st.header(
-        "Model Comparison"
-    )
+    section_card("🏆 Model Comparison")
 
     leaderboard = pd.DataFrame(
         st.session_state.comparison_results
@@ -1364,49 +1763,66 @@ if (
     
 st.markdown("""
 <div style="
-text-align:center;
-padding:35px;
-margin-top:20px;
-margin-bottom:10px;
-border-radius:18px;
-background:linear-gradient(135deg,#0F172A,#1E3A8A);
+margin-top:50px;
+padding:30px 40px;
+border-radius:20px;
+background:linear-gradient(135deg,#0F172A,#1E293B);
 color:white;
 box-shadow:0 8px 25px rgba(0,0,0,0.15);
 ">
 
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+">
+
+<div>
+
 <h2 style="
-margin-bottom:10px;
-color:white;
+margin:0;
+font-size:32px;
 font-weight:700;
+color:white;
 ">
 MLPilot
 </h2>
 
 <p style="
-font-size:18px;
-color:#E2E8F0;
-margin-bottom:15px;
+margin-top:8px;
+font-size:16px;
+color:#CBD5E1;
 ">
 AI-Powered AutoML Platform
 </p>
 
 <p style="
-font-size:16px;
-color:#CBD5E1;
-margin-bottom:20px;
+margin-top:5px;
+font-size:14px;
+color:#94A3B8;
 ">
 Build • Train • Analyze • Deploy
 </p>
 
-<hr style="
-border:0;
-height:1px;
-background:#475569;
-margin:15px 0;
+</div>
+
+<div style="
+text-align:right;
 ">
 
 <p style="
+margin:0;
 font-size:15px;
+color:#CBD5E1;
+">
+Built with
+Python • Scikit-Learn • Streamlit
+</p>
+
+<p style="
+margin-top:8px;
+font-size:14px;
 color:#94A3B8;
 ">
 Developed by
@@ -1414,6 +1830,36 @@ Developed by
 Bharadwaj Boyapati
 </b>
 </p>
+
+</div>
+
+</div>
+
+<hr style="
+border:none;
+height:1px;
+background:#334155;
+margin:20px 0;
+">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+font-size:13px;
+color:#94A3B8;
+">
+
+<div>
+© 2026 MLPilot. All Rights Reserved.
+</div>
+
+<div>
+AutoML • Classification • Regression • Analytics
+</div>
+
+</div>
 
 </div>
 """, unsafe_allow_html=True)
