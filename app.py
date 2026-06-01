@@ -271,86 +271,75 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown(f"""
-<div style="
-background:white;
-padding:20px 30px;
-border-radius:20px;
-box-shadow:0 4px 15px rgba(0,0,0,0.08);
-margin-bottom:20px;
-">
+hero = st.container(border=True)
 
-<div style="
-display:flex;
-align-items:center;
-justify-content:space-around;
-">
+with hero:
 
-<div style="
-display:flex;
-align-items:center;
-gap:30px;
-width:65%;
-">
+    left, right = st.columns(
+        [2.3, 1.4],
+        vertical_alignment="center"
+    )
 
-<img src="file:///{logo_path}"
-style="
-width:420px;
-height:auto;
-object-fit:contain;
-">
+    with left:
 
-<div>
+        c1, c2 = st.columns(
+            [2, 3],
+            vertical_alignment="center"
+        )
 
-<h1 style="
-margin:0;
-font-size:54px;
-color:#0F172A;
-">
-MLPilot
-</h1>
+        with c1:
 
-<p style="
-font-size:22px;
-color:#2563EB;
-margin:0;
-font-weight:600;
-">
-AI-Powered AutoML Platform
-</p>
+            st.image(
+                "MLPilot_Logo.webp",
+                width=360
+            )
 
-<p style="
-font-size:16px;
-color:#64748B;
-margin-top:8px;
-">
-Build • Train • Analyze • Deploy
-</p>
+        with c2:
 
-</div>
+            st.markdown("""
+            <div style="
+            padding-top:10px;
+            ">
 
-</div>
+            <h1 style="
+            margin:0;
+            font-size:64px;
+            color:#0F172A;
+            font-weight:800;
+            ">
+            MLPilot
+            </h1>
 
-<div style="
-width:35%;
-display:flex;
-justify-content:center;
-align-items:center;
-">
+            <p style="
+            margin-top:10px;
+            margin-bottom:10px;
+            font-size:24px;
+            color:#2563EB;
+            font-weight:600;
+            ">
+            AI-Powered AutoML Platform
+            </p>
 
-<img src="file:///{header_path}"
-style="
-width:720px;
-max-width:100%;
-height:auto;
-">
+            <p style="
+            margin:0;
+            font-size:18px;
+            color:#64748B;
+            ">
+            Build • Train • Analyze • Deploy
+            </p>
 
-</div>
+            </div>
+            """,
+            unsafe_allow_html=True)
 
-</div>
+    with right:
 
-</div>
-""", unsafe_allow_html=True)
+        st.markdown("<br><br>", unsafe_allow_html=True)
+
+        st.image(
+            "Header_image.webp",
+            use_container_width=True
+        )
 
 c1, c2, c3, c4 = st.columns(4)
 
@@ -501,25 +490,45 @@ if "comparison_results" not in st.session_state:
     
     
 
-st.sidebar.image(
-    "MLPilot_Logo.webp",
-    width=90
-)
+logo_col, text_col = st.sidebar.columns([1.1, 1.9])
 
-st.sidebar.markdown("""
-<h2 style="
-margin-bottom:0px;
-">
-MLPilot
-</h2>
+with logo_col:
+    st.image("MLPilot_Logo.webp", width=125)
 
-<p style="
-color:#64748B;
-font-size:16px;
-">
-Build • Train • Analyze • Deploy
-</p>
-""", unsafe_allow_html=True)
+with text_col:
+    st.markdown("""
+    <div style="
+    margin-top:1px;
+    margin-left:-8px;
+    ">
+    
+    <h2 style="
+    margin:0;
+    font-size:26px;
+    color:#0F172A;
+    ">
+    MLPilot
+    </h2>
+
+    <p style="
+    margin:0;
+    color:#2563EB;
+    font-size:12px;
+    font-weight:600;
+    ">
+    AI-Powered AutoML Platform
+    </p>
+
+    <p style="
+    margin-top:3px;
+    color:#64748B;
+    font-size:11px;
+    ">
+    Build • Train • Analyze • Deploy
+    </p>
+
+    </div>
+    """, unsafe_allow_html=True)
 
 st.sidebar.markdown("---")
 
