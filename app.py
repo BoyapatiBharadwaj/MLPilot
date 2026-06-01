@@ -55,7 +55,7 @@ from modules.exporter import (
 
 st.set_page_config(
     page_title="MLPilot",
-    page_icon="assets/MLPilot_Logo.png",
+    page_icon="MLPilot_Logo.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -172,7 +172,7 @@ col1, col2 = st.columns([1,6])
 
 with col1:
     st.image(
-        "assets/MLPilot_Logo.png",
+        "MLPilot_Logo.png",
         width = 420
     )
 
@@ -265,7 +265,7 @@ col1, col2 = st.sidebar.columns([1,4])
 
 with col1:
     st.image(
-        "assets/MLPilot_Logo.png",
+        "MLPilot_Logo.png",
         width=150
     )
 
