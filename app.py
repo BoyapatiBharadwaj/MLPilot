@@ -1356,7 +1356,8 @@ if st.session_state.results:
         plot_roc_curve,
         plot_pr_curve,
         plot_actual_vs_predicted,
-        plot_residuals
+        plot_residuals,
+        plot_coefficients
     )
     
     results = st.session_state.results
