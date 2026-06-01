@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import uuid
 
 from modules.data_loader import (
     load_dataset,
@@ -83,9 +84,16 @@ def clarity_event(event_name):
     components.html(
         f"""
         <script>
-        if (typeof clarity !== 'undefined') {{
-            clarity("event", "{event_name}");
+
+        if (window.clarity) {{
+
+            window.clarity(
+                "event",
+                "{event_name}"
+            );
+
         }}
+
         </script>
         """,
         height=0
@@ -265,6 +273,26 @@ st.markdown("---")
 
 initialize_session()
 
+if "visitor_id" not in st.session_state:
+
+    st.session_state.visitor_id = (
+        str(uuid.uuid4())
+    )
+
+    clarity_event(
+        "new_visitor"
+    )
+
+if "homepage_visit" not in st.session_state:
+
+    clarity_event(
+        "homepage_visit"
+    )
+
+    st.session_state.homepage_visit = True
+    
+    
+
 if "initialized" not in st.session_state:
 
     st.session_state.results = None
@@ -334,9 +362,32 @@ if uploaded_file is not None:
             "dataset_uploaded"
         )
 
-        clarity_event(
-            st.session_state.dataset_name
-        )
+        rows = len(df)
+        cols = len(df.columns)
+
+        if rows < 100:
+            clarity_event("rows_under_100")
+
+        elif rows < 1000:
+            clarity_event("rows_100_to_1000")
+
+        elif rows < 10000:
+            clarity_event("rows_1000_to_10000")
+
+        else:
+            clarity_event("rows_over_10000")
+
+        if cols < 10:
+            clarity_event("columns_under_10")
+
+        elif cols < 50:
+            clarity_event("columns_10_to_50")
+
+        elif cols < 100:
+            clarity_event("columns_50_to_100")
+
+        else:
+            clarity_event("columns_over_100")
 
         st.session_state.dataset_uploaded_logged = True
 
@@ -421,6 +472,22 @@ target_column = st.selectbox(
     df.columns
 )
 
+if (
+    "last_target"
+    not in st.session_state
+    or
+    st.session_state.last_target
+    != target_column
+):
+
+    clarity_event(
+        f"target_{target_column}"
+    )
+
+    st.session_state.last_target = (
+        target_column
+    )
+
 
 available_features = [
 
@@ -466,7 +533,9 @@ problem_type = st.radio(
     "Classification" else 1
 )
 
-current_problem = problem_type.lower()
+current_problem = (
+    problem_type.lower()
+)
 
 if (
     "last_problem_type"
@@ -551,9 +620,11 @@ if (
 ):
 
     clarity_event(
+
         encoding_method
             .lower()
-            .replace(" ","_")
+            .replace(" ", "_")
+
     )
 
     st.session_state.last_encoding = (
@@ -574,19 +645,22 @@ scaling_method = st.selectbox(
 )
 
 if (
-    "last_scaling"
+    "last_scaler"
     not in st.session_state
     or
-    st.session_state.last_scaling
+    st.session_state.last_scaler
     != scaling_method
 ):
 
     clarity_event(
+
         scaling_method
             .lower()
+            .replace(" ", "_")
+
     )
 
-    st.session_state.last_scaling = (
+    st.session_state.last_scaler = (
         scaling_method
     )
 
@@ -742,7 +816,19 @@ if train_clicked:
         clarity_event(
             "train_button_clicked"
         )
-        
+
+        clarity_event(
+            f"trained_{selected_model}"
+        )
+
+        clarity_event(
+            f"encoding_{encoding_method}"
+        )
+
+        clarity_event(
+            f"scaler_{scaling_method}"
+        )
+
         clarity_event(
             f"cv_folds_{cv_folds}"
         )
@@ -850,6 +936,34 @@ if train_clicked:
         st.success(
             "Training Completed"
         )
+        
+        clarity_event(
+            "training_success"
+        )
+
+        if results["training_time"] < 1:
+
+            clarity_event(
+                "training_under_1s"
+            )
+
+        elif results["training_time"] < 5:
+
+            clarity_event(
+                "training_under_5s"
+            )
+
+        elif results["training_time"] < 30:
+
+            clarity_event(
+                "training_under_30s"
+            )
+
+        else:
+
+            clarity_event(
+                "training_over_30s"
+            )
         
 if st.session_state.results:
     results = st.session_state.results
@@ -1212,7 +1326,18 @@ if (
     len(
         st.session_state.comparison_results
     ) > 0
-):
+):  
+    
+    if (
+        "comparison_logged"
+        not in st.session_state
+    ):
+
+        clarity_event(
+            "comparison_viewed"
+        )
+
+        st.session_state.comparison_logged = True
 
     st.header(
         "Model Comparison"
