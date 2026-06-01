@@ -14,10 +14,6 @@ from modules.preprocessing import (
     build_preprocessor
 )
 
-from modules.trainer import (
-    train_model
-)
-
 from modules.evaluator import (
     classification_metrics,
     regression_metrics
@@ -28,27 +24,8 @@ from modules.hyperparameters import (
     REGRESSION_PARAMS
 )
 
-from modules.visualizer import *
-
-from modules.exporter import *
-
-from modules.report_generator import *
-
 from modules.session_manager import (
     initialize_session
-)
-
-from modules.visualizer import (
-    plot_confusion_matrix,
-    plot_roc_curve,
-    plot_pr_curve,
-    plot_actual_vs_predicted,
-    plot_residuals
-)
-
-from modules.exporter import (
-    export_model,
-    export_csv
 )
 
 import streamlit.components.v1 as components
@@ -1220,6 +1197,8 @@ train_clicked = st.button(
 
 if train_clicked:
     
+        from modules.trainer import train_model
+    
         clarity_event(
             "train_button_clicked"
         )
@@ -1369,6 +1348,17 @@ if train_clicked:
             )
         
 if st.session_state.results:
+    
+    from modules.report_generator import create_report
+    
+    from modules.visualizer import (
+        plot_confusion_matrix,
+        plot_roc_curve,
+        plot_pr_curve,
+        plot_actual_vs_predicted,
+        plot_residuals
+    )
+    
     results = st.session_state.results
     section_card("📋 Training Summary")
     c1, c2, c3, c4 = st.columns(4)
@@ -1538,6 +1528,12 @@ if st.session_state.results:
             "MAPE",
             f"{metrics['MAPE']:.4f}"
         )
+    
+    
+    from modules.exporter import (
+        export_model,
+        export_csv
+    )
             
     csv_data = export_csv(df)
     
