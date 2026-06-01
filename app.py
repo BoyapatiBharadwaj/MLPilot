@@ -407,19 +407,6 @@ if st.session_state.dataset is None:
     
 df = st.session_state.dataset
 
-if "dataset_size_logged" not in st.session_state:
-
-    clarity_event(
-        f"rows_{len(df)}"
-    )
-
-    clarity_event(
-        f"columns_{len(df.columns)}"
-    )
-
-    st.session_state.dataset_size_logged = True
-
-
 st.header("Dataset Explorer")
 
 tab1, tab2, tab3, tab4 = st.tabs([
@@ -700,8 +687,6 @@ if (
     != current_model_event
 ):
 
-    clarity_event(current_model_event)
-
     st.session_state.last_model_event = (
         current_model_event
     )
@@ -935,10 +920,6 @@ if train_clicked:
         
         st.success(
             "Training Completed"
-        )
-        
-        clarity_event(
-            "training_success"
         )
 
         if results["training_time"] < 1:
