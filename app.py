@@ -1,6 +1,9 @@
+import os
 import streamlit as st
 import pandas as pd
 import uuid
+
+
 
 from modules.data_loader import (
     load_dataset,
@@ -30,17 +33,14 @@ from modules.session_manager import (
 
 import streamlit.components.v1 as components
 
-import base64
 
-with open("MLPilot_Logo.webp", "rb") as img:
-    logo_base64 = base64.b64encode(
-        img.read()
-    ).decode()
-    
-with open("Header_image.webp", "rb") as img:
-    logo_base64_1 = base64.b64encode(
-        img.read()
-    ).decode()
+logo_path = os.path.abspath(
+    "MLPilot_Logo.webp"
+)
+
+header_path = os.path.abspath(
+    "Header_image.webp"
+)
 
 
 def section_card(title):
@@ -293,7 +293,7 @@ gap:30px;
 width:65%;
 ">
 
-<img src="data:image/webp;base64,{logo_base64}"
+<img src="file:///{logo_path}"
 style="
 width:420px;
 height:auto;
@@ -338,7 +338,7 @@ justify-content:center;
 align-items:center;
 ">
 
-<img src="data:image/webp;base64,{logo_base64_1}"
+<img src="file:///{header_path}"
 style="
 width:720px;
 max-width:100%;
