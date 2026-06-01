@@ -78,6 +78,19 @@ components.html(
     height=0
 )
 
+def clarity_event(event_name):
+
+    components.html(
+        f"""
+        <script>
+        if (typeof clarity !== 'undefined') {{
+            clarity("event", "{event_name}");
+        }}
+        </script>
+        """,
+        height=0
+    )
+
 st.markdown("""
 <style>
 
@@ -311,6 +324,21 @@ if uploaded_file is not None:
     df = load_dataset(uploaded_file)
 
     st.session_state.dataset = df
+    
+    if (
+        "dataset_uploaded_logged"
+        not in st.session_state
+    ):
+
+        clarity_event(
+            "dataset_uploaded"
+        )
+
+        clarity_event(
+            st.session_state.dataset_name
+        )
+
+        st.session_state.dataset_uploaded_logged = True
 
     st.session_state.dataset_name = (
         uploaded_file.name
@@ -327,6 +355,18 @@ if st.session_state.dataset is None:
     
     
 df = st.session_state.dataset
+
+if "dataset_size_logged" not in st.session_state:
+
+    clarity_event(
+        f"rows_{len(df)}"
+    )
+
+    clarity_event(
+        f"columns_{len(df.columns)}"
+    )
+
+    st.session_state.dataset_size_logged = True
 
 
 st.header("Dataset Explorer")
@@ -426,6 +466,24 @@ problem_type = st.radio(
     "Classification" else 1
 )
 
+current_problem = problem_type.lower()
+
+if (
+    "last_problem_type"
+    not in st.session_state
+    or
+    st.session_state.last_problem_type
+    != current_problem
+):
+
+    clarity_event(
+        current_problem
+    )
+
+    st.session_state.last_problem_type = (
+        current_problem
+    )
+
 
 st.header("Preprocessing")
 
@@ -484,6 +542,24 @@ encoding_method = st.selectbox(
     ]
 )
 
+if (
+    "last_encoding"
+    not in st.session_state
+    or
+    st.session_state.last_encoding
+    != encoding_method
+):
+
+    clarity_event(
+        encoding_method
+            .lower()
+            .replace(" ","_")
+    )
+
+    st.session_state.last_encoding = (
+        encoding_method
+    )
+
 
 scaling_method = st.selectbox(
 
@@ -496,6 +572,23 @@ scaling_method = st.selectbox(
         "RobustScaler"
     ]
 )
+
+if (
+    "last_scaling"
+    not in st.session_state
+    or
+    st.session_state.last_scaling
+    != scaling_method
+):
+
+    clarity_event(
+        scaling_method
+            .lower()
+    )
+
+    st.session_state.last_scaling = (
+        scaling_method
+    )
 
 
 st.header("Model Selection")
@@ -518,6 +611,26 @@ selected_model = st.selectbox(
     "Choose Model",
     model_names
 )
+
+current_model_event = (
+    selected_model
+        .lower()
+        .replace(" ", "_")
+)
+
+if (
+    "last_model_event"
+    not in st.session_state
+    or
+    st.session_state.last_model_event
+    != current_model_event
+):
+
+    clarity_event(current_model_event)
+
+    st.session_state.last_model_event = (
+        current_model_event
+    )
 
 
 st.subheader("Hyperparameters")
@@ -626,6 +739,22 @@ train_clicked = st.button(
 
 if train_clicked:
     
+        clarity_event(
+            "train_button_clicked"
+        )
+        
+        clarity_event(
+            f"cv_folds_{cv_folds}"
+        )
+
+        clarity_event(
+            f"test_size_{test_size}"
+        )
+
+        clarity_event(
+            f"features_{len(selected_features)}"
+        )
+    
         if len(selected_features) == 0:
 
             st.error(
@@ -682,6 +811,10 @@ if train_clicked:
             )
 
         except Exception as e:
+            
+            clarity_event(
+                "training_failed"
+            )
 
             st.error(
                 f"Training Failed: {str(e)}"
@@ -709,6 +842,11 @@ if train_clicked:
         st.session_state.current_model = selected_model
         st.session_state.current_problem_type = problem_type
         progress.progress(100)
+        
+        clarity_event(
+            "training_success"
+        )
+        
         st.success(
             "Training Completed"
         )
@@ -759,6 +897,10 @@ if st.session_state.results:
             y_test,
             predictions,
             results["probabilities"]
+        )
+        
+        clarity_event(
+            "classification_evaluated"
         )
         
         metric_df = pd.DataFrame({
@@ -839,6 +981,10 @@ if st.session_state.results:
             y_test,
 
             predictions
+        )
+        
+        clarity_event(
+            "regression_evaluated"
         )
         
         metric_df = pd.DataFrame({
@@ -925,27 +1071,56 @@ if st.session_state.results:
 
     with d1:
 
-        st.download_button(
+        model_download = st.download_button(
             "⬇ Download Model",
             model_buffer,
             f"{model_name_clean}.pkl"
         )
 
+        if model_download:
+
+            clarity_event(
+                "model_downloaded"
+            )
+
     with d2:
 
-        st.download_button(
+        dataset_download = st.download_button(
             "⬇ Download Dataset",
             csv_data,
             f"{dataset_name}.csv"
         )
 
+        if dataset_download:
+
+            clarity_event(
+                "dataset_downloaded"
+            )
+
     with d3:
 
-        st.download_button(
+        report_download = st.download_button(
             "⬇ Download Report",
             report_buffer,
             f"{model_name_clean}_Report.pdf"
         )
+
+        if report_download:
+
+            clarity_event(
+                "report_downloaded"
+            )
+            
+    if (
+        "visualization_logged"
+        not in st.session_state
+    ):
+
+        clarity_event(
+            "visualizations_viewed"
+        )
+
+        st.session_state.visualization_logged = True
     
     st.header("Visualizations")
 
