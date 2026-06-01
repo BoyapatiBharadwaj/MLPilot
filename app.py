@@ -50,7 +50,7 @@ from modules.exporter import (
     export_csv
 )
 
-
+import streamlit.components.v1 as components
 
 
 st.set_page_config(
@@ -58,6 +58,26 @@ st.set_page_config(
     page_icon="MLPilot_Logo.png",
     layout="wide",
     initial_sidebar_state="expanded"
+)
+
+components.html(
+    """
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FNY2CSGBB6"></script>
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag(){
+          dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+
+      gtag('config', 'G-FNY2CSGBB6');
+    </script>
+    """,
+    height=0
 )
 
 st.markdown("""
@@ -1063,19 +1083,58 @@ if (
     
 
     
-st.markdown("---")
+st.markdown("""
+<div style="
+text-align:center;
+padding:35px;
+margin-top:20px;
+margin-bottom:10px;
+border-radius:18px;
+background:linear-gradient(135deg,#0F172A,#1E3A8A);
+color:white;
+box-shadow:0 8px 25px rgba(0,0,0,0.15);
+">
 
-st.markdown(
-    """
-    <div style='text-align:center'>
-    
-    <h4>MLPilot</h4>
-    
-    AI-Powered AutoML Platform
-    
-    Build • Train • Analyze • Deploy
-    
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+<h2 style="
+margin-bottom:10px;
+color:white;
+font-weight:700;
+">
+MLPilot
+</h2>
+
+<p style="
+font-size:18px;
+color:#E2E8F0;
+margin-bottom:15px;
+">
+AI-Powered AutoML Platform
+</p>
+
+<p style="
+font-size:16px;
+color:#CBD5E1;
+margin-bottom:20px;
+">
+Build • Train • Analyze • Deploy
+</p>
+
+<hr style="
+border:0;
+height:1px;
+background:#475569;
+margin:15px 0;
+">
+
+<p style="
+font-size:15px;
+color:#94A3B8;
+">
+Developed by
+<b style="color:white;">
+Bharadwaj Boyapati
+</b>
+</p>
+
+</div>
+""", unsafe_allow_html=True)
