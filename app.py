@@ -50,7 +50,7 @@ from modules.exporter import (
     export_csv
 )
 
-import streamlit.components.v1 as components
+from streamlit_gtag import st_gtag
 
 
 st.set_page_config(
@@ -60,24 +60,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-components.html(
-    """
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FNY2CSGBB6"></script>
-
-    <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag(){
-          dataLayer.push(arguments);
-      }
-
-      gtag('js', new Date());
-
-      gtag('config', 'G-FNY2CSGBB6');
-    </script>
-    """,
-    height=0
+st_gtag(
+    key="mlpilot_page_view",
+    id="G-FNY2CSGBB6",
+    event_name="page_view",
+    params={
+        "event_category": "engagement",
+        "event_label": "MLPilot",
+        "value": 1,
+    },
 )
 
 st.markdown("""
