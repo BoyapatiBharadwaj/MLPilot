@@ -55,12 +55,12 @@ import streamlit.components.v1 as components
 
 import base64
 
-with open("MLPilot_Logo.png", "rb") as img:
+with open("MLPilot_Logo.webp", "rb") as img:
     logo_base64 = base64.b64encode(
         img.read()
     ).decode()
     
-with open("Header_image.png", "rb") as img:
+with open("Header_image.webp", "rb") as img:
     logo_base64_1 = base64.b64encode(
         img.read()
     ).decode()
@@ -90,7 +90,7 @@ def section_card(title):
 
 st.set_page_config(
     page_title="MLPilot",
-    page_icon="MLPilot_Logo.png",
+    page_icon="MLPilot_Logo.webp",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -316,7 +316,7 @@ gap:30px;
 width:65%;
 ">
 
-<img src="data:image/png;base64,{logo_base64}"
+<img src="data:image/webp;base64,{logo_base64}"
 style="
 width:420px;
 height:auto;
@@ -361,7 +361,7 @@ justify-content:center;
 align-items:center;
 ">
 
-<img src="data:image/png;base64,{logo_base64_1}"
+<img src="data:image/webp;base64,{logo_base64_1}"
 style="
 width:720px;
 max-width:100%;
@@ -525,7 +525,7 @@ if "comparison_results" not in st.session_state:
     
 
 st.sidebar.image(
-    "MLPilot_Logo.png",
+    "MLPilot_Logo.webp",
     width=90
 )
 
