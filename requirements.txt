@@ -19,5 +19,3 @@ seaborn==0.13.2
 joblib==1.5.1
 
 reportlab==4.4.1
-
-streamlit-gtag==0.0.13
