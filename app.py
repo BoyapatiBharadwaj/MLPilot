@@ -59,6 +59,11 @@ with open("MLPilot_Logo.png", "rb") as img:
     logo_base64 = base64.b64encode(
         img.read()
     ).decode()
+    
+with open("Header_image.png", "rb") as img:
+    logo_base64_1 = base64.b64encode(
+        img.read()
+    ).decode()
 
 
 def section_card(title):
@@ -301,17 +306,22 @@ margin-bottom:20px;
 <div style="
 display:flex;
 align-items:center;
-justify-content:space-between;
+justify-content:space-around;
 ">
 
 <div style="
 display:flex;
 align-items:center;
-gap:20px;
+gap:30px;
+width:65%;
 ">
 
 <img src="data:image/png;base64,{logo_base64}"
-width="360">
+style="
+width:420px;
+height:auto;
+object-fit:contain;
+">
 
 <div>
 
@@ -344,10 +354,19 @@ Build • Train • Analyze • Deploy
 
 </div>
 
-<div>
+<div style="
+width:35%;
+display:flex;
+justify-content:center;
+align-items:center;
+">
 
-<img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png"
-width="320">
+<img src="data:image/png;base64,{logo_base64_1}"
+style="
+width:720px;
+max-width:100%;
+height:auto;
+">
 
 </div>
 
@@ -539,6 +558,20 @@ uploaded_file = st.sidebar.file_uploader(
     label_visibility="collapsed"
 )
 
+if uploaded_file is None:
+
+    st.session_state.dataset = None
+    st.session_state.results = None
+    st.session_state.comparison_results = []
+    st.session_state.current_model = None
+    st.session_state.current_problem_type = None
+
+    if "dataset_name" in st.session_state:
+        del st.session_state.dataset_name
+
+    if "dataset_uploaded_logged" in st.session_state:
+        del st.session_state.dataset_uploaded_logged
+
 st.sidebar.markdown("---")
 
 st.sidebar.markdown("""
@@ -578,7 +611,7 @@ st.sidebar.markdown("---")
 
 st.sidebar.markdown("""
 <div style="
-background:#F8FAFC;
+background:#EFF6FF;
 padding:20px;
 border-radius:15px;
 border:1px solid #E2E8F0;
